@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.niu</groupId>
+    <artifactId>niu-java-program-lianx</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <packaging>jar</packaging>
+
+    <dependencies>
+        <!-- 其它依赖 begin -->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.16.16</version>
+        </dependency>
+
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <version>1.2.3</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-simple</artifactId>
+            <version>1.7.30</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.javassist</groupId>
+            <artifactId>javassist</artifactId>
+            <version>3.25.0-GA</version>
+        </dependency>
+
+        <dependency>
+            <groupId>io.netty</groupId>
+            <artifactId>netty-all</artifactId>
+            <version>4.1.53.Final</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpasyncclient</artifactId>
+            <version>4.1.4</version>
+        </dependency>
+        <dependency>
+            <groupId>com.squareup.okhttp3</groupId>
+            <artifactId>okhttp</artifactId>
+            <version>4.8.1</version>
+        </dependency>
+        <!-- 其它依赖 end -->
+    </dependencies>
+    <!-- 多环境配置BEGIN -->
+    <profiles>
+        <profile>
+            <id>dev</id>
+            <properties>
+                <env.name>dev</env.name>
+                <mybatis.logImpl>STDOUT_LOGGING</mybatis.logImpl>
+            </properties>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+        </profile>
+        <profile>
+            <id>test</id>
+            <properties>
+                <env.name>test</env.name>
+                <mybatis.logImpl>NO_LOGGING</mybatis.logImpl>
+            </properties>
+        </profile>
+        <profile>
+            <id>pre</id>
+            <properties>
+                <env.name>pre</env.name>
+                <mybatis.logImpl>NO_LOGGING</mybatis.logImpl>
+            </properties>
+        </profile>
+        <profile>
+            <id>online</id>
+            <properties>
+                <env.name>online</env.name>
+                <mybatis.logImpl>NO_LOGGING</mybatis.logImpl>
+            </properties>
+        </profile>
+    </profiles>
+    <!-- 多环境配置END -->
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+<!--                <version>2.3.1</version>-->
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <addClasspath>true</addClasspath>
+                        </manifest>
+                        <manifestEntries>
+                            <Premain-Class>
+                                com.niu.ceshi.jike.TestAgent
+                            </Premain-Class>
+                            <Agent-Class>
+                                com.niu.ceshi.jike.AgentMain
+                            </Agent-Class>
+                            <Can-Redefine-Classes>true</Can-Redefine-Classes>
+                            <Can-Retransform-Classes>true</Can-Retransform-Classes>
+                        </manifestEntries>
+                    </archive>
+                </configuration>
+            </plugin>
+        </plugins>
+        <finalName>niu-java-program-lianx</finalName>
+        <resources>
+            <!-- 先排除资源根目录下各环境的配置 -->
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+                <excludes>
+                    <exclude>dev/*</exclude>
+                    <exclude>test/*</exclude>
+                    <exclude>pre/*</exclude>
+                    <exclude>online/*</exclude>
+                </excludes>
+            </resource>
+            <!-- 包含当前环境下的*.properties (保持目录结构) -->
+            <resource>
+                <directory>src/main/resources</directory>
+                <includes>
+                    <include>${env.name}/*.properties</include>
+                </includes>
+            </resource>
+            <!-- 包含当前环境下的logback.xml (需复制到CLASSPATH根下面) -->
+            <resource>
+                <directory>src/main/resources/${env.name}</directory>
+                <filtering>true</filtering>
+                <includes>
+                    <include>logback.xml</include>
+                </includes>
+            </resource>
+        </resources>
+    </build>
+</project>
