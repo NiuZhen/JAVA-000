@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+        "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+<generatorConfiguration>
+    <context id="DB2Tables" defaultModelType="flat" targetRuntime="MyBatis3">
+        <!-- Mybatis generator mapper文件重新生成不会覆盖原文件，为了解决此问题 -->
+        <plugin type="com.geektime.database.tools.OverIsMergeablePlugin"></plugin>
+
+        <!-- 是否去除自动生成的注释 -->
+        <commentGenerator type="com.geektime.database.tools.CustomFromDBCommentGenerator">
+            <property name="suppressAllComments" value="false"/>
+            <property name="suppressDate" value="false"/>
+        </commentGenerator>
+
+        <!-- 数据库连接信息 zeroDateTimeBehavior=convertToNull&amp; -->
+        <jdbcConnection driverClass="com.mysql.cj.jdbc.Driver"
+                        connectionURL="jdbc:mysql://localhost:3306/timegeek?serverTimezone=UTC&amp;useUnicode=true&amp;characterEncoding=UTF-8&amp;allowMultiQueries=true&amp;useInformationSchema=true"
+                        userId="root" password="123456">
+        </jdbcConnection>
+        <javaTypeResolver>
+            <property name="forceBigDecimals" value="true"/>
+        </javaTypeResolver>
+
+        <!-- po实体类代码位置 -->
+        <javaModelGenerator targetPackage="com.geektime.springbootdemo.entity.shop"
+                            targetProject="D:\java\openSource\niu-test\springboot-demo\src\main\java">
+            <property name="enableSubPackages" value="true"/>
+            <property name="trimStrings" value="true"/>
+        </javaModelGenerator>
+        <!-- sql代码的xml映射文件位置 -->
+        <sqlMapGenerator targetPackage="mapping.shop"
+                         targetProject="D:\java\openSource\niu-test\springboot-demo\src\main\resources">
+            <property name="enableSubPackages" value="true"/>
+        </sqlMapGenerator>
+        <!-- mapper接口位置 -->
+        <javaClientGenerator type="XMLMAPPER" targetPackage="com.geektime.springbootdemo.mapper.shop"
+                             targetProject="D:\java\openSource\niu-test\springboot-demo\src\main\java">
+            <property name="enableSubPackages" value="true"/>
+        </javaClientGenerator>
+
+        <!-- 自动生成的表 -->
+        <table tableName="t_goods" domainObjectName="Goods"
+               enableSelectByExample="true" enableDeleteByExample="false"
+               enableCountByExample="false" enableUpdateByExample="false">
+            <property name="useActualColumnNames" value="false"/>
+            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
+        </table>
+        <table tableName="t_goods_categorys" domainObjectName="goodsCategorys"
+               enableSelectByExample="true" enableDeleteByExample="false"
+               enableCountByExample="false" enableUpdateByExample="false">
+            <property name="useActualColumnNames" value="false"/>
+            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
+        </table>
+        <table tableName="t_order" domainObjectName="Orders"
+               enableSelectByExample="true" enableDeleteByExample="false"
+               enableCountByExample="false" enableUpdateByExample="false">
+            <property name="useActualColumnNames" value="false"/>
+            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
+        </table>
+        <table tableName="t_order_detail" domainObjectName="orderDetail"
+               enableSelectByExample="true" enableDeleteByExample="false"
+               enableCountByExample="false" enableUpdateByExample="false">
+            <property name="useActualColumnNames" value="false"/>
+            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
+        </table>
+        <table tableName="t_user" domainObjectName="User"
+               enableSelectByExample="true" enableDeleteByExample="false"
+               enableCountByExample="false" enableUpdateByExample="false">
+            <property name="useActualColumnNames" value="false"/>
+            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
+        </table>
+
+    </context>
+</generatorConfiguration>

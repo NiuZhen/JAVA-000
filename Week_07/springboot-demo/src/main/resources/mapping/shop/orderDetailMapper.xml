@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.geektime.springbootdemo.mapper.shop.orderDetailMapper">
+  <resultMap id="BaseResultMap" type="com.geektime.springbootdemo.entity.shop.orderDetail">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="order_id" jdbcType="INTEGER" property="orderId" />
+    <result column="goods_id" jdbcType="INTEGER" property="goodsId" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="goods_number" jdbcType="SMALLINT" property="goodsNumber" />
+    <result column="sales_amount" jdbcType="DECIMAL" property="salesAmount" />
+    <result column="ori_price" jdbcType="DECIMAL" property="oriPrice" />
+    <result column="valid" jdbcType="BIT" property="valid" />
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.geektime.springbootdemo.entity.shop.orderDetail">
+    <result column="snapshot_json" jdbcType="LONGVARCHAR" property="snapshotJson" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, order_id, goods_id, create_time, update_time, goods_number, sales_amount, ori_price, 
+    valid
+  </sql>
+  <sql id="Blob_Column_List">
+    snapshot_json
+  </sql>
+  <select id="selectByExampleWithBLOBs" parameterType="com.geektime.springbootdemo.entity.shop.orderDetailExample" resultMap="ResultMapWithBLOBs">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from t_order_detail
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByExample" parameterType="com.geektime.springbootdemo.entity.shop.orderDetailExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from t_order_detail
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="ResultMapWithBLOBs">
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from t_order_detail
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from t_order_detail
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.geektime.springbootdemo.entity.shop.orderDetail">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_order_detail (order_id, goods_id, create_time, 
+      update_time, goods_number, sales_amount, 
+      ori_price, valid, snapshot_json
+      )
+    values (#{orderId,jdbcType=INTEGER}, #{goodsId,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{updateTime,jdbcType=TIMESTAMP}, #{goodsNumber,jdbcType=SMALLINT}, #{salesAmount,jdbcType=DECIMAL}, 
+      #{oriPrice,jdbcType=DECIMAL}, #{valid,jdbcType=BIT}, #{snapshotJson,jdbcType=LONGVARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.geektime.springbootdemo.entity.shop.orderDetail">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_order_detail
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="orderId != null">
+        order_id,
+      </if>
+      <if test="goodsId != null">
+        goods_id,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+      <if test="goodsNumber != null">
+        goods_number,
+      </if>
+      <if test="salesAmount != null">
+        sales_amount,
+      </if>
+      <if test="oriPrice != null">
+        ori_price,
+      </if>
+      <if test="valid != null">
+        valid,
+      </if>
+      <if test="snapshotJson != null">
+        snapshot_json,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="orderId != null">
+        #{orderId,jdbcType=INTEGER},
+      </if>
+      <if test="goodsId != null">
+        #{goodsId,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="goodsNumber != null">
+        #{goodsNumber,jdbcType=SMALLINT},
+      </if>
+      <if test="salesAmount != null">
+        #{salesAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="oriPrice != null">
+        #{oriPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="valid != null">
+        #{valid,jdbcType=BIT},
+      </if>
+      <if test="snapshotJson != null">
+        #{snapshotJson,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.geektime.springbootdemo.entity.shop.orderDetail">
+    update t_order_detail
+    <set>
+      <if test="orderId != null">
+        order_id = #{orderId,jdbcType=INTEGER},
+      </if>
+      <if test="goodsId != null">
+        goods_id = #{goodsId,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="goodsNumber != null">
+        goods_number = #{goodsNumber,jdbcType=SMALLINT},
+      </if>
+      <if test="salesAmount != null">
+        sales_amount = #{salesAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="oriPrice != null">
+        ori_price = #{oriPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="valid != null">
+        valid = #{valid,jdbcType=BIT},
+      </if>
+      <if test="snapshotJson != null">
+        snapshot_json = #{snapshotJson,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.geektime.springbootdemo.entity.shop.orderDetail">
+    update t_order_detail
+    set order_id = #{orderId,jdbcType=INTEGER},
+      goods_id = #{goodsId,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      goods_number = #{goodsNumber,jdbcType=SMALLINT},
+      sales_amount = #{salesAmount,jdbcType=DECIMAL},
+      ori_price = #{oriPrice,jdbcType=DECIMAL},
+      valid = #{valid,jdbcType=BIT},
+      snapshot_json = #{snapshotJson,jdbcType=LONGVARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.geektime.springbootdemo.entity.shop.orderDetail">
+    update t_order_detail
+    set order_id = #{orderId,jdbcType=INTEGER},
+      goods_id = #{goodsId,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      goods_number = #{goodsNumber,jdbcType=SMALLINT},
+      sales_amount = #{salesAmount,jdbcType=DECIMAL},
+      ori_price = #{oriPrice,jdbcType=DECIMAL},
+      valid = #{valid,jdbcType=BIT}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>
